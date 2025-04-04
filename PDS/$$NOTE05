@@ -1,0 +1,90 @@
+zECF - Event Capture Facility V2R3M0 is ready to replace FILE500
+
+Subject:  zECF - Event Capture Facility V2R3M0 is ready to replace FILE500
+From:     Ben Marino <b2marino@outlook.com>
+Date:     12/1/2021, 8:06 AM
+To:       Sam Golob <sbgolob@cbttape.org>
+
+Hi Sam,
+
+When you get a chance, please replace file 500 with the following libraries:
+
+SYS1.ZECF.V2R3M0.ASM
+SYS1.ZECF.V2R3M0.MAC
+SYS1.ZECF.V2R3M0.CMDPROC
+SYS1.ZECF.V2R3M0.INSTLIB
+SYS1.ZECF.V2R3M0.PARMLIB
+
+INSTLIB($$$DOC) contains the following list of enhancements as well as some seve
+
+SUMMARY OF ENHANCEMENTS FOR ECF VERSION 2 RELEASE 3 (V2R3M0)
+
+1.   Added SVC screening support in source modules ASM(ECFSVC,EVFSVS,
+      ECFS35, ECFLOG). The SVC screening table and related structures are mapped
+      by macro MAC($ECFSVX). Refer to PARMLIB(ECFMSTR,TRAPSVC) for more
+      details, and PARMLIB(TRAPSVC) for a event rule examples.
+
+2.   Added active LPA display command "?D LPA,A" and dynamic LPA display
+      command "?D LPA,D".
+
+3.   Enhanced Event Rule processor ASM(ECFREB) to support the issuing
+      of commands and messages via rule trigger CMD('command') and
+      WTO('message') directly without invoking a REXX EXEC or CLIST.
+      Of course, you can call a REXX EXEC or CLIST if you need to
+      perform additional processing. Refer to PARMLIB(VLFRULE) for a
+      complete example.
+
+4.   Added system events trigger type MONITOR. that define MONITOR rules
+      to alert you when a system or subsystem started task address
+      space normally or abnormally terminates. Refer to PARMLIB(SYSRULE)
+      for a system monitoring rule example.
+
+5.   Added IRBRUN PC routine in ASM(ECFXPC) that schedules asynchronous
+      exits, IRBs, to execute under any task in any address space in
+      the system. Refer to macro in MAC($IRBRUN) for calling examples.
+      The PC caller must have READ authority to profile ZECF.XPC.AUTH,
+      under RACF class, ECFCLASS, before calling this PC routine.
+
+6.   Added DYNLPA PC routine in ASM(ECFXPC) that allows you to add and
+      delete load modules to/from the Dynamic-LPA. Refer to ECF macro
+      MAC($DYNLPA) for calling examples.
+      The PC caller must have READ authority to profile ZECF.XPC.AUTH,
+      under RACF class, ECFCLASS, before calling this PC routine.
+
+7.   Enhanced ASM(ECFXPC) TPROT PC routine to support validating 64-bit
+      virtual storage addresses. MAC($TPROT) macro supports a new operand,
+      ADDR64, that allows you to specify a 64-bit virtual storage address.
+
+8.   Added PERSIST={NO|YES} initialization option in PARMLIB(ECFMSTR).
+      member. Review INSTLIB($$PARMS) member for complete details.
+
+9.   Added common functional recovery routine (FRR) recovery termination
+      manager in source module ASM(ECFFRR) and MAC($ECFFRR) in support of
+      ECF-locked service routines.
+
+10. Changed message listener ASM(ECFS35) to allow MSGTRAP triggers to be
+      defined for WTO/R messages issued by subtasks of the ECF subsystem
+      server. See ASM(ECFS35) change code @05.
+
+11. Added INSTLIB($$CALLS) member that describes how to invoke useful
+      ECF subsystem server PC an SVC calls.
+
+12. Fixed a bug in variable resolution processor ASM(ECFVRX). The fix
+      removes residual characters at the end of &SYSDATA, &COMMAND and
+      &MESSAGE variables. See ASM(ECFVRX) change code @04.
+
+13. Fixed a bug in event rule processor ASM(ECFREB) to allow MONITOR
+      type rules to de defined without having to specify the EXEC()
+      statement to call a REXX EXEC or CLIST. See ASM(ECFREB) change code
+      @04A.
+
+14. Fixed SC01 and S301 ABEND in the WTO message service routine. See
+      ASM(ECFWTO) change code @04.
+
+15. Fixed S378-14 ABEND when invoking started task recovery COMPRESS
+      routine of ASM(ECFSTC) to compress a partitioned data set.
+      See ASM(ECFSTC) change code @04.
+
+Have a blessed day,
+-Ben
+

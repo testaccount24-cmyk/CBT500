@@ -1,0 +1,19 @@
+Subject:  ECF 2.1.0 is ready for the CBT tape
+From:     Ben Marino <b2marino@outlook.com>
+Date:     5/13/2021, 7:03 AM
+To:       Sam Golob <sbgolob@cbttape.org>
+
+Hi Sam,
+
+Enhanced ECF 2.1.0 to work on MVS/zOS.
+It's been fully stress tested and the following CBT system data
+sets are ready to replace file 500 on the CBT tape.
+
+SYS1.ECF.V2R1M0.ASM
+SYS1.ECF.V2R1M0.MAC
+SYS1.ECF.V2R1M0.PARMLIB
+SYS1.ECF.V2R1M0.INSTLIB
+SYS1.ECF.V2R1M0.CMDPROC
+
+Have a wonderful day,
+-Ben

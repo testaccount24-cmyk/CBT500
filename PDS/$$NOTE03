@@ -1,0 +1,31 @@
+Subject:  Re: ECF 2.1.0 is ready for the CBT tape
+From:     Ben Marino <b2marino@outlook.com>
+Date:     5/13/2021, 11:37 AM
+To:       Sam Golob <sbgolob@cbttape.org>
+
+Dear Sam,
+
+It will work on both MVS 3.8 and MVS/zOS.
+I didn't strip out the MVS 3.8j code. Internal checks determine
+which environment ECF is running under and processes accordingly.
+
+Thanks much, Sam!
+-Ben
+
+
+
+From: Sam Golob <sbgolob@cbttape.org>
+Sent: Thursday, May 13, 2021 9:07 AM
+To: Ben Marino <b2marino@outlook.com>
+Subject: Re: ECF 2.1.0 is ready for the CBT tape
+
+Dear Ben,
+Thanks for your amazing work.
+One question:  If the previous File 500 is for MVS 3.8, and this
+ one is for z/OS, then I would like to display both of them. So
+ maybe they should be in two separate files. What is your take on
+ that?
+Thanks again for this gift.
+All the best of everything to you and your family.
+Sincerely,   Sam
+

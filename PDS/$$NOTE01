@@ -1,0 +1,57 @@
+Subject:  For CBT tape: - zECF Event Capture Facility
+From:     Ben Marino <b2marino@outlook.com>
+Date:     2/23/2021, 9:41 AM
+To:       "sbgolob@cbttape.org" <sbgolob@cbttape.org>
+
+Hi Sam,
+
+For fun, I developed an automation product on my MVS 3.8j
+(HERCULES) system that triggers CLIST/REXX scripts to execute
+automation events. The started tasks recovery component (ECFSTC)
+allows you to browse and update procedures that are preventing a
+system from IPLing. It also allows you to issue most TSO commands
+from the console. Please share it on the CBT tape. Let me know if
+you have questions concerns.
+
+Attached find the following zECF zipped text files:
+
+ASM.TXT
+MAC.TXT
+INSTLIB.TXT
+PARMLIB.TXT
+CMDPROC.TXT
+
+All the documentation can be found on the INSTLIB file.
+
+    Follow the installation steps in INSTLIB($$INST)
+
+    Review PARMLIB(ECFMSTR) subsystem initialization member. Note
+    zECF implements SVC 255. Change it if needed.
+
+    INSTLIB(ECF) is the started task JCL procedure used to start
+    zECF.
+
+    Review INSTLIB($$ECF) This explains how to start zECF during
+    started task recovery situations.
+
+    Run JCL procedure INSTLIB(ZZECFSSM) to assemble and link the
+    product into your system.
+
+My web sites - They're still a work in progress:
+https://allthingszos.webnode.com/
+
+allthingszOS
+The Event Capture Facility (ECF) traps system and subsystems
+events in real-time.
+
+allthingszos.webnode.com
+
+https://mvsinternals.webnode.com/
+
+MVSinternals
+mvsinternals.webnode.com
+
+Best regards,
+Ben Marino
+b2marino@outlook.com
+

@@ -1,0 +1,1120 @@
+./ ADD NAME=$INDEX   0111-21062-21278-1028-00039-00029-00039-BENMAR  07
+/*-------------------------------------------------------------------*/
+/*                                                                   */
+/* $INDEX   - This member.                                           */
+/*                                                                   */
+/* $RULES   - Managing Event Rules examples.                         */
+/*                                                                   */
+/* ECFMSTR  - ECF initialization parameters bember.                  */
+/*                                                                   */
+/* ECFCMP   - IEBCOPY compress. This member is used by ECF started   */
+/*            task JCL procedure to compress SYSTSIN, SYSTSPRT,      */
+/*            SYSJOBS during Event Capture Facility start up.        */
+/*                                                                   */
+/* ECFSUB   - RUNAS=JOB JCL procedure. This member contains JCL that */
+/*            is submitted by ECF to run triggered rules defined     */
+/*            with the RUNAS=JOB attribute.                          */
+/*                                                                   */
+/* ENDJOBS  - Sample jobs termination event rules.                   */
+/*                                                                   */
+/* INIJOBS  - Sample jobs initialization event rules.                */
+/*                                                                   */
+/* STOPTSO  - Sample TSO termination event rule.                     */
+/*                                                                   */
+/* WTOBUFF  - Sample WTO buffer shortage monitor event rule.         */
+/*                                                                   */
+/* SVCDUMP  - Automatic reply to DUMP command event rule.            */
+/*                                                                   */
+/* SYSEVNT  - Warning and critical system events event rules.        */
+/*                                                                   */
+/* SYSRULE  - Monitor system address spaces event rules              */
+/*                                                                   */
+/* VLFRULE  - Virtual Lookaside Facility monitoring rule.            */
+/*                                                                   */
+/* TRAPSVC  - Sample SVC screening event rules.                      */
+/*                                                                   */
+/* ZEVENTS  - Defines supported events by the ECF subsystem.         */
+/*                                                                   */
+/* ZVARS    - Defines supported event rule variables.                */
+/*                                                                   */
+/*-------------------------------------------------------------------*/
+./ ADD NAME=$RULES   0103-21212-21212-1438-00065-00001-00000-BENMAR  05
+/*-------------------------------------------------------------------*/
+/*                                                                   */
+/* DEFINING EVENT RULES:                                             */
+/*  To permanently define event rules to ECF, you need to add        */
+/*  rule statements in ECF PARMLIB member ECFMSTR.                   */
+/*                                                                   */
+/*  Examples:                                                        */
+/*   RULE=MYRULE,MODE=ACTIVE,RUNAS=STC                               */
+/*   RULE=XYZRULE,MODE=INACTIVE,RUNAS=JOB                            */
+/*                                                                   */
+/*                                                                   */
+/* DYNAMICALLY DEFINING EVENT RULES:                                 */
+/*  You can dynamically define event rules by issuing the ?ADD       */
+/*  add command.                                                     */
+/*                                                                   */
+/*  Examples:                                                        */
+/*   ?ADD RULE=MYRULE,MODE=ACTIVE,RUNAS=STC                          */
+/*   ?ADD RULE=XYZRULE,MODE=INACTIVE,RUNAS=JOB                       */
+/*                                                                   */
+/*                                                                   */
+/* DYNAMICALLY REFRESHING EVENT RULES:                               */
+/*  You can dynamically refresh event rules by issuing the ?REF      */
+/*  refresh command.                                                 */
+/*                                                                   */
+/*  Examples:                                                        */
+/*   ?REF RULE=MYRULE                                                */
+/*   ?REF RULE=MYRULE,MODE=ACTIVE,RUNAS=STC                          */
+/*   ?REF RULE=XYZRULE,MODE=INACTIVE,RUNAS=JOB                       */
+/*                                                                   */
+/*                                                                   */
+/* DYNAMICALLY ACTIVATING EVENT RULES:                               */
+/*  You can dynamically activate event rules by issuing the ?ACT     */
+/*  activate command.                                                */
+/*                                                                   */
+/*  Example:                                                         */
+/*   ?ACT RULE=XYZRULE                                               */
+/*                                                                   */
+/*                                                                   */
+/* DYNAMICALLY INACTIVATING EVENT RULES:                             */
+/*  You can dynamically inactivate event rules by issuing the ?INACT */
+/*  inactivate command.                                              */
+/*                                                                   */
+/*  Example:                                                         */
+/*   ?INACT RULE=MYRULE                                              */
+/*                                                                   */
+/*                                                                   */
+/* DISPLAYING EVENT RULES:                                           */
+/*  You can display defined event rules by issuing the ?DISPLAY      */
+/*  display command.                                                 */
+/*                                                                   */
+/*  Examples:                                                        */
+/*   ?D RULES                                                        */
+/*   ?DISPLAY RULES                                                  */
+/*                                                                   */
+/*                                                                   */
+/* DISPLAYING A SINGLE RULE:                                         */
+/*  You can display a single event rule by issuing the ?DISPLAY      */
+/*  display command.                                                 */
+/*                                                                   */
+/*   ?D RULE=MYRULE                                                  */
+/*   ?DISPLAY RULE=XYZRULE                                           */
+/*                                                                   */
+/*-------------------------------------------------------------------*/
+/*-------------------------------------------------------------------*/
+/*-------------------------------------------------------------------*/
+./ ADD NAME=ECFCMP   0100-21062-21062-1131-00003-00003-00000-BENMAR  03
+ COPY INDD=ECFJOBS,OUTDD=ECFJOBS
+ COPY INDD=SYSTSIN,OUTDD=SYSTSIN
+ COPY INDD=SYSTSPRT,OUTDD=SYSTSPRT
+./ ADD NAME=ECFMSTR  0199-21062-21335-0803-00055-00045-00000-BENMAR  42
+/*-------------------------------------------------------------------*/
+/*                                                                   */
+/*   Event Capture Facility Initialization Parameters                */
+/*                                                                   */
+/*-------------------------------------------------------------------*/
+/*
+SVC=255            .SVC manager support option
+MSAS=TEST          .MSAS={ONLY|TEST} option
+PERSIST=YES        .tear down environment on subsequent ECF restart
+SETCON=YES         .SETCON={NO|YES} SETCON MN,JOBNAMES=(ON,LOG) option
+DEBUG=OFF          .DEBUG={ON|OFF} option
+TRACE=OFF          .TRACE={ON|OFF} option
+SDUMP=YES          .SDUMP={NO|YES} option
+TIMER=00           .TIMER={00|60} Interval timer default
+CAPTURE=NO         .CAPTURE={NO|YES} resource utilization data capture
+Q10LOCK=NO         .Q10LOCK={NO|YES} SYSIEFSD/Q10 serialization
+REPLYID=2          .REPLYID={2|000} maximum reply ID size default
+COMPWTO=YES        .COMPWTO={NO|YES} option
+SHOWREB=NO         .SHOWREB={NO|YES} option
+MONTIMER=15        .MONTIMER={nn} system address spaces timer interval
+MONMSGCT=0016      .Number of times to issue ECF700E for MONITOR rules
+TRAPSVC=SVCLOG     .TRAPSVC={NO|SMFnnn|DDname} SVC screening option
+/*
+REBPOOL=(16,08)    .Default: REB Cell Pool: PRI=16,SEC=08
+SRBPOOL=(16,08)    .Default: SRB Cell Pool: PRI=16,SEC=08
+SREPOOL=(16,08)    .Default: SRE Cell Pool: PRI=16,SEC=08
+/*
+SSREQ=NO           .trap all WTOs(no UCMBRDST in MVS 3.8j)
+RUNAS=STC          .Rules run as started tasks default
+TSOSUB=ECFR        .Recovery TSO subsystem JCL procedure name
+TMP=IKJEFT01       .Terminal Monitor Program name default
+TMPSTC=ECFTMP      .TMP started task JCL procedure name default
+/*
+/*-------------------------------------------------------------------*/
+/*   Define the following required data sets at initialization time  */
+/*-------------------------------------------------------------------*/
+/*
+SYSIN=SYS1.ECF.SYSIN
+PARMLIB=SYS1.ECF.PARMLIB
+SYSPROC=SYS1.ECF.CMDPROC
+ECFJOBS=SYS1.ECF.ECFJOBS
+SYSTSIN=SYS1.ECF.SYSTSIN
+SYSTSPRT=SYS1.ECF.SYSTSPRT
+SYSPRINT=SYS1.ECF.SYSPRINT
+/*
+/*-------------------------------------------------------------------*/
+/*   Implement the following event rules at initialization time      */
+/*-------------------------------------------------------------------*/
+/*
+RULE=SYSRULE,MODE=INACTIVE,RUNAS=STC
+RULE=SYSEVNT,MODE=INACTIVE,RUNAS=STC
+RULE=VLFRULE,MODE=INACTIVE,RUNAS=STC
+RULE=STOPTSO,MODE=INACTIVE,RUNAS=STC
+RULE=WTOBUFF,MODE=INACTIVE,RUNAS=STC
+/*
+./ ADD NAME=ECFSUB   0101-21062-21075-0943-00067-00067-00004-BENMAR  28
+//&JOBNAME JOB (ACCT#),B-MARINO,
+//         NOTIFY=BENMAR,CLASS=B,MSGCLASS=X
+//*
+//*------------------------------------------------------------------*
+//*                                                                  *
+//*  RUNAS=JOB default JCL procedure                                 *
+//*                                                                  *
+//*  Event Capture Facility submits the following JCL to the         *
+//*  internal reader for triggered event rules that are defined      *
+//*  with the RUNAS=JOB option.                                      *
+//*                                                                  *
+//*  1. When jobname on the JOB card is specified as &JOBNAME,       *
+//*     ECF replaces it with the jobname specified on the RULE=      *
+//*     keyword parameter. For example, if the rule is defined as    *
+//*     follows:                                                     *
+//*                                                                  *
+//*     RULE=PAYRUN,MODE=ACTIVE,RUNAS=JOB,JOBNAME=$PAYDAY            *
+//*                                                                  *
+//*     The JOB card &JOBNAME symbolic variable is replaced with     *
+//*     job name $PAYDAY.                                            *
+//*                                                                  *
+//*      //$PAYDAY JOB (RDR-RUNASJOB),NOTIFY=HERC01,                 *
+//*      //        CLASS=A,MSGCLASS=X                                *
+//*                                                                  *
+//*     If JOBNAME= keyword is not specified on the RULE= keyword    *
+//*     parameter, &JOBNAME is replaced with the rule member name.   *
+//*                                                                  *
+//*      //PAYRUN JOB (RDR-RUNASJOB),NOTIFY=HERC01,                  *
+//*      //       CLASS=A,MSGCLASS=X                                 *
+//*                                                                  *
+//*     If a static jobname is used on the JOB card, no symbolic     *
+//*     variable substitution takes place.                           *
+//*                                                                  *
+//*  2. Change NOTIFY=HERC01 as required.                            *
+//*                                                                  *
+//*  3. Change CLASS=A to your installation standards.               *
+//*                                                                  *
+//*  4. Change MSGCLASS=X to your installation standards.            *
+//*                                                                  *
+//*  5. Change SYSPROC DSName to your installation standards         *
+//*     and concatenate other REXX/CLIST data sets as required.      *
+//*                                                                  *
+//*  6. DO NOT change SYSIN, SYSUT1, SYSUT2, SYSTSIN, SYSTSPRT,      *
+//*     TSRLOG data definition statements.                           *
+//*                                                                  *
+//*  7. DO NOT add any JCL statements after the SYSTSIN DD *         *
+//*     data definition statement.                                   *
+//*                                                                  *
+//*  NOTE: This procedure must reside in the Event Capture Facility  *
+//*        PARMLIB data set (this data set) as member name ECFSUB.   *
+//*                                                                  *
+//*------------------------------------------------------------------*
+//*
+//RDR     EXEC PGM=IEBGENER
+//SYSPRINT DD SYSOUT=*
+//SYSUT2   DD SYSOUT=(Z,INTRDR)
+//SYSIN    DD DUMMY
+//SYSUT1   DD DATA,DLM=$$
+//*
+//&JOBNAME JOB (ACCT#),B-MARINO,
+//         NOTIFY=BENMAR,CLASS=B,MSGCLASS=X
+//*
+//STEP1   EXEC PGM=IKJEFT01,DYNAMNBR=32,REGION=4096K
+//SYSPROC  DD DSN=HERC01.BEN.CMDPROC,DISP=SHR
+//TSRLOG   DD DUMMY
+//SYSTSPRT DD SYSOUT=*
+//SYSTSIN  DD *
+./ ADD NAME=ECF2MSTR 0121-21062-21335-0803-00051-00046-00051-BENMAR  55
+/*-------------------------------------------------------------------*/
+/*                                                                   */
+/*   Event Capture Facility Initialization Parameters                */
+/*                                                                   */
+/*-------------------------------------------------------------------*/
+/*
+SVC=255            .SVC manager support option
+MSAS=TEST          .MSAS={ONLY|TEST} option
+PERSIST=YES        .tear down environment on subsequent ECF start up
+SETCON=YES         .SETCON MN,JOBNAMES=(ON,LOG) option
+DEBUG=OFF          .DEBUG={ON|OFF} option
+TRACE=OFF          .TRACE={ON|OFF} option
+SDUMP=YES          .SDUMP={NO|YES} option
+TIMER=00           .Interval timer default (00-60)
+CAPTURE=NO         .CAPTURE={NO|YES} resource utilization data capture
+REPLYID=3          .Maximum reply ID size default (range 0 to 999)
+Q10LOCK=NO         .DONOT serialize SYSIEFSD/Q10 CSCB chain
+COMPWTO=YES        .COMPWTO={NO|YES} option
+SHOWREB=NO         .SHOWREB={NO|YES} option
+MONTIMER=15        .Monitored system address spaces timer interval
+MONMSGCT=0016      .Number of times to issue ECF700E for MONITOR rules
+TRAPSVC=NO         .DONOT activate SVC screening component
+/*
+REBPOOL=(16,08)    .Default: REB Cell Pool: PRI=16,SEC=08
+SRBPOOL=(16,08)    .Default: SRB Cell Pool: PRI=16,SEC=08
+SREPOOL=(16,08)    .Default: SRE Cell Pool: PRI=16,SEC=08
+/*
+SSREQ=NO           .trap all WTOs(no UCMBRDST in MVS 3.8j)
+RUNAS=STC          .Rules run as started tasks default
+TSOSUB=ECFR        .Recovery TSO subsystem JCL procedure name
+TMP=IKJEFT01       .Terminal Monitor Program name default
+TMPSTC=ECFTMP      .TMP started task JCL procedure name default
+/*
+PARMLIB=SYS1.ECF.PARMLIB
+ECFJOBS=SYS1.ECF.ECFJOBS
+SYSTSIN=SYS1.ECF.SYSTSIN
+SYSTSPRT=SYS1.ECF.SYSTSPRT
+SYSPROC=SYS1.ECF.CMDPROC
+SYSIN=SYS1.ECF.SYSIN
+SYSPRINT=SYS1.ECF.SYSPRINT
+/*
+/*-------------------------------------------------------------------*/
+/*   Implement the following event rules at initialization time      */
+/*-------------------------------------------------------------------*/
+/*
+RULE=SYSRULE,MODE=INACTIVE,RUNAS=STC
+RULE=SYSEVNT,MODE=INACTIVE,RUNAS=STC
+RULE=VLFRULE,MODE=INACTIVE,RUNAS=STC
+RULE=STOPTSO,MODE=INACTIVE,RUNAS=STC
+RULE=WTOBUFF,MODE=INACTIVE,RUNAS=STC
+/*
+./ ADD NAME=ENDJOBS  0107-21062-21308-0719-00055-00029-00038-BENMAR  01
+/*------------------------------------------------------------------*/
+/* Monitoring Job Termination Event Rule                            */
+/*                                                                  */
+/*  When job names prefixed with "AR", "STR" and suffixed with "LY" */
+/*  normally or abnormally end, the JOBTERM CLIST is triggered.     */
+/*                                                                  */
+/*  The following variables are available to the triggered event    */
+/*  rule:                                                           */
+/*                                                                  */
+/*  &EVENT   - Event type (in this example: JOBTERM)                */
+/*  &TRIGGER - Event trigger (in this example: AR****LY & AR****LY) */
+/*  &JOBNAME - Ending job name                                      */
+/*  &JOBTYPE - Ending job type (JOB, STC, TSU)                      */
+/*  &SYSID   - SMF system ID where job ran                          */
+/*  &LPAR    - LPAR name where job ran                              */
+/*  &TIME    - Time job ended or ABENDed                            */
+/*  &DATE    - Date job ended or ABENDed                            */
+/*                                                                  */
+/*  To define this event rule to ECF, add the following RULE        */
+/*  statement in PARMLIB member ECFMSTR:                            */
+/*                                                                  */
+/*   RULE=ENDJOBS,MODE=ACTIVE,RUNAS=STC                             */
+/*                                                                  */
+/*  When you define the rule in PARMLIB member ECFMSTR, ECF adds    */
+/*  it to the active queue when the subsystem instance is started.  */
+/*                                                                  */
+/*  To dynamically define this event rule to ECF, issue the ?ADD    */
+/*  command as follows:                                             */
+/*                                                                  */
+/*   /?ADD RULE=ENDJOBS,MODE=ACTIVE,RUNAS=STC                       */
+/*                                                                  */
+/*  Requirement: You must set ECF initialization option SETCON to   */
+/*               SETCON=YES in ECF PARMLIB member ECFMSTR. This     */
+/*               causes the MVS job scheduler to issue "IEF" WTO    */
+/*               messages that are listened to by ECF to trigger    */
+/*               event rules. SETCON=YES is the ECF default. this   */
+/*               causes ECF to issue the following MVS command      */
+/*               internally: SETCON MN,JOBNAMES=(ON,LOG)            */
+/*                                                                  */
+/*               SETCON=NO causes ECF initialization to bypass      */
+/*               issuing the MVS SETCON command. If you choose this */
+/*               option, you must issue the command manually:       */
+/*               SETCON MN,JOBNAMES=(ON,LOG)                        */
+/*                                                                  */
+/*------------------------------------------------------------------*/
+/*
+JOBTERM(AR****LY)
+EXEC(%JOBTERM) JOB(&JOBNAME) TYPE(&JOBTYPE) SYS(&SYSID) TIME(&TIME)
+               DATE(&DATE)
+END
+/*
+JOBTERM(STR***LY)
+EXEC(%JOBTERM) &JOBNAME &JOBTYPE &SYSID TIME(&TIME) DATE(&DATE)
+END
+/*
+./ ADD NAME=INIJOBS  0107-21062-21308-0719-00056-00030-00039-BENMAR  10
+/*------------------------------------------------------------------*/
+/* Monitoring Job Initialization Event Rule                         */
+/*                                                                  */
+/*  When job names prefixed with "AR", "STR" and suffixed with "LY" */
+/*  start, the JOBINIT CLIST is triggered for execution.            */
+/*                                                                  */
+/*  The following variables are available to the triggered event    */
+/*  rule:                                                           */
+/*                                                                  */
+/*  &EVENT   - Event type (in this example: JOBINIT)                */
+/*  &TRIGGER - Event trigger (in this example, AR****LY & AR****LY) */
+/*  &JOBNAME - Job name                                             */
+/*  &JOBTYPE - job type (JOB, STC, TSU)                             */
+/*  &SYSID   - SMF system ID where job is running                   */
+/*  &LPAR    - LPAR name where job is running                       */
+/*  &TIME    - Time job started                                     */
+/*  &DATE    - Date job started                                     */
+/*                                                                  */
+/*  To define this event rule to ECF, add the following RULE        */
+/*  statement in PARMLIB member ECFMSTR:                            */
+/*                                                                  */
+/*   RULE=INIJOBS,MODE=ACTIVE,RUNAS=STC                             */
+/*                                                                  */
+/*  When you define the rule in PARMLIB member ECFMSTR, ECF adds    */
+/*  it to the active queue when the subsystem instance is started.  */
+/*                                                                  */
+/*  To dynamically define this event rule to ECF, issue the ?ADD    */
+/*  command as follows:                                             */
+/*                                                                  */
+/*   /?ADD RULE=INIJOBS,MODE=ACTIVE,RUNAS=STC                       */
+/*                                                                  */
+/*  Requirement: You must set ECF initialization option SETCON to   */
+/*               SETCON=YES in ECF PARMLIB member ECFMSTR. This     */
+/*               causes the MVS job scheduler to issue "IEF" WTO    */
+/*               messages that are listened to by ECF to trigger    */
+/*               event rules. SETCON=YES is the ECF default. this   */
+/*               causes ECF to issue the following MVS command      */
+/*               internally: SETCON MN,JOBNAMES=(ON,LOG)            */
+/*                                                                  */
+/*               SETCON=NO causes ECF initialization to bypass      */
+/*               issuing the MVS SETCON command. If you choose this */
+/*               option, you must issue the command manually:       */
+/*               SETCON MN,JOBNAMES=(ON,LOG)                        */
+/*                                                                  */
+/*------------------------------------------------------------------*/
+/*
+JOBINIT(AR****LY)
+EXEC(%JOBINIT) JOB(&JOBNAME) TYPE(&JOBTYPE) EVENT(&EVENT) SYS(&SYSID)
+               TIME(&TIME) DATE(&DATE)
+END
+/*
+JOBINIT(STR***LY)
+EXEC(%JOBINIT) JOB(&JOBNAME) TYPE(&JOBTYPE) EVENT(&EVENT) SYS(&SYSID)
+               TIME(&TIME) DATE(&DATE)
+END
+/*
+./ ADD NAME=STOPTSO  0106-21062-21308-0719-00046-00020-00046-BENMAR  25
+/*------------------------------------------------------------------*/
+/*                                                                  */
+/* Monitoring TSO Termination Event                                 */
+/*                                                                  */
+/*  This event is triggered when TSO is in the process of being     */
+/*  shutdown. The rule replies 'U' to allow TSO to terminate.       */
+/*                                                                  */
+/*  WTOR:                                                           */
+/*  nn IKT012D TCAS TERMINATION IN PROGRESS - REPLY 'U' or 'DUMP'   */
+/*                                                                  */
+/*  The REPLY(U) rule record is expanded to 'R nn,U'. Where 'nn'    */
+/*  is the outstanding WTOR reply ID captured in event variable     */
+/*  &REPLYID.                                                       */
+/*                                                                  */
+/*  To define this event rule to ECF, add the following RULE        */
+/*  statement in PARMLIB member ECFMSTR:                            */
+/*                                                                  */
+/*   RULE=STOPTSO,MODE=ACTIVE,RUNAS=STC                             */
+/*                                                                  */
+/*  When you define the rule in PARMLIB member ECFMSTR, ECF adds    */
+/*  it to the active queue when the subsystem instance is started.  */
+/*                                                                  */
+/*  To dynamically define this event rule to ECF, issue the ?ADD    */
+/*  command as follows:                                             */
+/*                                                                  */
+/*   /?ADD RULE=STOPTSO,MODE=ACTIVE,RUNAS=STC                       */
+/*                                                                  */
+/*  Requirement: You must set ECF initialization option SETCON to   */
+/*               SETCON=YES in ECF PARMLIB member ECFMSTR. This     */
+/*               causes the MVS job scheduler to issue "IEF" WTO    */
+/*               messages that are listened to by ECF to trigger    */
+/*               event rules. SETCON=YES is the ECF default. this   */
+/*               causes ECF to issue the following MVS command      */
+/*               internally: SETCON MN,JOBNAMES=(ON,LOG)            */
+/*                                                                  */
+/*               SETCON=NO causes ECF initialization to bypass      */
+/*               issuing the MVS SETCON command. If you choose this */
+/*               option, you must issue the command manually:       */
+/*               SETCON MN,JOBNAMES=(ON,LOG)                        */
+/*                                                                  */
+/*------------------------------------------------------------------*/
+/*
+TRAPMSG('IKT012D TCAS TERMINATION IN PROGRESS')
+REPLY(U)
+END
+/*
+./ ADD NAME=SVCDUMP  0109-21089-21308-0719-00049-00022-00035-BENMAR  33
+/*------------------------------------------------------------------*/
+/*                                                                  */
+/* Automatic reply to DUMP command event rule                       */
+/*                                                                  */
+/*  When the "DUMP COMM=(dump-title)" is issued, the MVS command    */
+/*  processor displays the following WTOR message:                  */
+/*                                                                  */
+/*  IEE094D SPECIFY OPERAND(S) FOR DUMP COMMAMD                     */
+/*                                                                  */
+/*  This event rule replies as follows:                             */
+/*                                                                  */
+/*  R nn,ASID=1,SDATA=(SQA,CSA,LSQA,RGN,END                         */
+/*                                                                  */
+/*  Where nn is the outstanding reply ID trapped by ECF in event    */
+/*  variable &REPLYID.                                              */
+/*                                                                  */
+/*  To define this event rule to ECF, add the following RULE        */
+/*  statement in PARMLIB member ECFMSTR:                            */
+/*                                                                  */
+/*   RULE=SVCDUMP,MODE=ACTIVE,RUNAS=STC                             */
+/*                                                                  */
+/*  When you define the rule in PARMLIB member ECFMSTR, ECF adds    */
+/*  it to the active queue when the subsystem instance is started.  */
+/*                                                                  */
+/*  To dynamically define this event rule to ECF, issue the ?ADD    */
+/*  command as follows:                                             */
+/*                                                                  */
+/*   /?ADD RULE=SVCDUMP,MODE=ACTIVE,RUNAS=STC                       */
+/*                                                                  */
+/*                                                                  */
+/*  Requirement: You must set ECF initialization option SETCON to   */
+/*               SETCON=YES in ECF PARMLIB member ECFMSTR. This     */
+/*               causes the MVS job scheduler to issue "IEF" WTO    */
+/*               messages that are listened to by ECF to trigger    */
+/*               event rules. SETCON=YES is the ECF default. this   */
+/*               causes ECF to issue the following MVS command      */
+/*               internally: SETCON MN,JOBNAMES=(ON,LOG)            */
+/*                                                                  */
+/*               SETCON=NO causes ECF initialization to bypass      */
+/*               issuing the MVS SETCON command. If you choose this */
+/*               option, you must issue the command manually:       */
+/*               SETCON MN,JOBNAMES=(ON,LOG)                        */
+/*                                                                  */
+/*------------------------------------------------------------------*/
+/*
+TRAPMSG('IEE094D')
+REPLY('ASID=1,SDATA=(SQA,CSA,LSQA,RGN),END')
+END
+/*
+./ ADD NAME=SYSEVNT  0119-21195-21277-1836-00149-00007-00149-BENMAR  01
+/*-------------------------------------------------------------------*/
+/*                                                                   */
+/* System resources shortage event rule                              */
+/*                                                                   */
+/*  When any of the following IRA messages are issued:               */
+/*                                                                   */
+/*  IRA400E PAGEABLE STORAGE SHORTAGE                                */
+/*  IRA402I PAGEABLE STORAGE SHORTAGE RELIEVED                       */
+/*  IRA405I nn% OF THE REAL STORAGE FRAMES ARE FIXED                 */
+/*  IRA200E AUXILIARY STORAGE SHORTAGE                               */
+/*  IRA201I CRITICAL AUXILIARY STORAGE SHORTAGE                      */
+/*  IRA202I AUXILIARY STORAGE SHORTAGE RELIEVED                      */
+/*  IRA205I nn% AUXILIARY STORAGE ALLOCATED                          */
+/*  IRA250I nn% OF STORAGE-CLASS MEMORY IS ALLOCATED                 */
+/*  IRA252I STORAGE-CLASS MEMORY ALLOCATION IS NOW BELOW nn%         */
+/*                                                                   */
+/*  The issued message causes CLIST SYSEVNT to trigger.              */
+/*                                                                   */
+/*  The following event variables are used in this rule:             */
+/*                                                                   */
+/*  &TRIGGER - Event trigger WTO message text                        */
+/*  &LPAR    - LPAR name                                             */
+/*  &DATE    - Event trigger date                                    */
+/*  &TIME    - Event trigger time                                    */
+/*                                                                   */
+/*  To define this event rule to ECF, add the following RULE         */
+/*  statement in PARMLIB member ECFMSTR:                             */
+/*                                                                   */
+/*   RULE=SYSEVNT,MODE=ACTIVE,RUNAS=STC                              */
+/*                                                                   */
+/*  When you define the rule in PARMLIB member ECFMSTR, ECF adds     */
+/*  it to the active queue when the subsystem instance is started.   */
+/*                                                                   */
+/*  To dynamically define this event rule to ECF, issue the ?ADD     */
+/*  command as follows:                                              */
+/*                                                                   */
+/*   /?ADD RULE=SYSEVNT,MODE=ACTIVE,RUNAS=STC                        */
+/*                                                                   */
+/*-------------------------------------------------------------------*/
+/*
+/* Too many fixed frames in storage
+/*
+/* IRA400E rc PAGEABLE STORAGE SHORTAGE
+/*
+/*
+TRAPMSG('IRA400E')
+EXEC(%SYSEVNT) WTO('&TRIGGER') LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+/* Pageable storage shortage due to excessive fixed frames relieved
+/* frames relieved.
+/*
+/* IRA402I PAGEABLE STORAGE SHORTAGE RELIEVED
+/*
+TRAPMSG('IRA402I')
+EXEC(%SYSEVNT) WTO('&TRIGGER') LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+/* Pageable storage warning that indicates there are too
+/* many fixed frames in storage.
+/*
+/* IRA405I rc nn% OF THE REAL STORAGE FRAMES ARE FIXED
+/*
+/*
+TRAPMSG('IRA405I')
+EXEC(%SYSEVNT) WTO('&TRIGGER') LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+/* Too many slots allocated in the AUX subsystem. It's a critical
+/* storage shortage. At least 85% of available auxiliary storage
+/* are in use.
+/*
+/* IRA201I CRITICAL AUXILIARY STORAGE SHORTAGE
+/*
+/*
+TRAPMSG('IRA201E')
+EXEC(%SYSEVNT) WTO('&TRIGGER') LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+/* Too many slots allocated in the AUX subsystem.
+/* at least 70% of all available auxiliary storage slots
+/*
+/* IRA200E AUXILIARY STORAGE SHORTAGE
+/*
+/*
+TRAPMSG('IRA200E')
+EXEC(%SYSEVNT) WTO('&TRIGGER') LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+/* There is no longer a shortage of auxiliary storage slots
+/* in the Auxiliary paging space.
+/*
+/* IRA202I AUXILIARY STORAGE SHORTAGE RELIEVED
+/*
+/*
+TRAPMSG('IRA202I')
+EXEC(%SYSEVNT) WTO('&TRIGGER') LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+/* The system has allocated more than 50% of all available slots
+/* in the auxiliary storage paging space.
+/*
+/* IRA205I nn% AUXILIARY STORAGE ALLOCATED
+/*
+/*
+TRAPMSG('IRA205I')
+EXEC(%SYSEVNT) WTO('&TRIGGER') LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+/* The system detected high usage of the available slots in storage-
+/* class memory (SCM). At least 80% of all available SCM slots in
+/* the system are in use.
+/*
+/* IRA250I nn% OF STORAGE-CLASS MEMORY IS ALLOCATED
+/*
+/*
+TRAPMSG('IRA250I')
+EXEC(%SYSEVNT) WTO('&TRIGGER') LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+/* There is no longer a high usage of available slots in storage-
+/* class memory (SCM). Less than 75% of all available SCM slots in
+/* system are in use.
+/*
+/* IRA252I STORAGE-CLASS MEMORY ALLOCATION IS NOW BELOW nn%
+/*
+/*
+TRAPMSG('IRA252I')
+EXEC(%SYSEVNT) WTO('&TRIGGER') LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+./ ADD NAME=SYSRULE  0122-21212-21248-1415-00102-00047-00000-BENMAR  03
+/*-------------------------------------------------------------------*/
+/*                                                                   */
+/* Monitoring system address spaces event rules                      */
+/*                                                                   */
+/*  This event is triggered when the monitored address spaces        */
+/*  specified normally or abnormally terminate.                      */
+/*                                                                   */
+/*  To define this event rule to ECF, add the following rule         */
+/*  statement in PARMLIB member ECFMSTR:                             */
+/*                                                                   */
+/*   RULE=SYSRULE,MODE=ACTIVE,RUNAS=STC                              */
+/*                                                                   */
+/*  When you define the rule in PARMLIB member ECFMSTR, ECF adds     */
+/*  it to the active queue when the subsystem instance is started.   */
+/*                                                                   */
+/*  To dynamically define this event rule to ECF, issue the ?ADD     */
+/*  add command as follows:                                          */
+/*                                                                   */
+/*   ?ADD RULE=SYSRULE,MODE=ACTIVE,RUNAS=STC                         */
+/*                                                                   */
+/*  The event rule supplies the SYSRULE CLIST with the following     */
+/*  event variables:                                                 */
+/*                                                                   */
+/*  &STCNAME - Started task name                                     */
+/*  &LPAR    - LPAR name                                             */
+/*  &DATE    - Triggered event date                                  */
+/*  &TIME    - Triggered event time                                  */
+/*                                                                   */
+/*-------------------------------------------------------------------*/
+/*
+MONITOR(SMF)
+EXEC(%SYSRULE) STC(&STCNAME) LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+MONITOR(SMS)
+EXEC(%SYSRULE) STC(&STCNAME) LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+MONITOR(JES2)
+EXEC(%SYSRULE) STC(&STCNAME) LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+MONITOR(JESXCF)
+EXEC(%SYSRULE) STC(&STCNAME) LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+MONITOR(JES2MON)
+EXEC(%SYSRULE) STC(&STCNAME) LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+MONITOR(VTAM)
+EXEC(%SYSRULE) STC(&STCNAME) LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+MONITOR(TSO)
+EXEC(%SYSRULE) STC(&STCNAME) LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+MONITOR(RACF)
+EXEC(%SYSRULE) STC(&STCNAME) LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+MONITOR(VLF)
+EXEC(%SYSRULE) STC(&STCNAME) LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+MONITOR(LLA)
+EXEC(%SYSRULE) STC(&STCNAME) LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+MONITOR(SDSF)
+EXEC(%SYSRULE) STC(&STCNAME) LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+MONITOR(TCPIP)
+EXEC(%SYSRULE) STC(&STCNAME) LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+/*-------------------------------------------------------------------*/
+/*
+./ ADD NAME=TRAPSVC  0134-21277-21334-1022-00129-00040-00000-BENMAR  53
+/*-------------------------------------------------------------------*/
+/*                                                                   */
+/* SVC screening Event Rule examples                                 */
+/*                                                                   */
+/*  ECF allows you to monitor SVCs issued by TSO users, started      */
+/*  tasks and batch jobs. Screening is activated when the system     */
+/*  attaches the jobstep task of the program name specified by the   */
+/*  PGM= EXEC statement. SVCs issued by programs running as subtasks */
+/*  attached by the jobstep task are also screened.                  */
+/*                                                                   */
+/*  SVC screening output data is logged according to the setting     */
+/*  of initialization option TRAPSVC= specified in ECF PARMLIB       */
+/*  initialization options member ECFMSTR. The following TRAPSVC=    */
+/*  options are supported:                                           */
+/*                                                                   */
+/*  TRAPSVC=NO                                                       */
+/*   TRAPSVC=NO is the default option. This option does not activate */
+/*   the SVC screening component.                                    */
+/*                                                                   */
+/*  TRAPSVC=DDname                                                   */
+/*   Captures SVC screening log data in the sequential dataset or    */
+/*   PDS member name specified in the job that is being SVC screened.*/
+/*   Log records are written when the SVC screened job, STC, TSU,    */
+/*   normally or abnormally terminates.                              */
+/*                                                                   */
+/*   Example:                                                        */
+/*   //STEP1  PGM=MYPGM                                              */
+/*   //SYSIN  DD DSN=...                                             */
+/*   //OUTPUT DD DSN=...                                             */
+/*   //SVCLOG DD SYSOUT=*                                            */
+/*   //*                                                             */
+/*   //STEP2  PGM=FILEPGM                                            */
+/*   //INFILE DD DSN=...                                             */
+/*   //OTFILE DD DSN=...                                             */
+/*   //SVCLOG DD DSN=MY.SVC.LOG.REPORT,DISP=OLD                      */
+/*   //                                                              */
+/*                                                                   */
+/*  TRAPSVC=SMF-record-number                                        */
+/*   Captures SVC screening log data using the user-specified SMF    */
+/*   record number. The SMF record is written when the SVC screened  */
+/*   JOB, STC, TSU, normally or abnormally terminates.               */
+/*                                                                   */
+/*   For each screened SVC a record is created that shows the        */
+/*   following information:                                          */
+/*                                                                   */
+/*  Example:                                                         */
+/*  ---------------------------------------------------------------- */
+/*                                                                   */
+/*  SVC ..................... 120  TYPE=1 APF=NO  NP=N LOCKS=LOCAL   */
+/*  MACRO ................... GETMAIN/FREEMAIN                       */
+/*   JOBname ................ BENMARX                                */
+/*   Step name .............. RUN                                    */
+/*   Program name ........... IGWCCA00                               */
+/*   Entry address .......... 04C7A000                               */
+/*    Issued at address ..... 04CA09F8                               */
+/*    Unit of work .......... SVRB                                   */
+/*    Authorization ......... AC(0)                                  */
+/*    System state .......... Supervisor                             */
+/*    Time and date ......... 07:25:59:94 11/29/2021                 */
+/*    Issued on CPU ......... 0000                                   */
+/*    Completed on CPU ...... 0000                                   */
+/*    Duration .............. 0.000001                               */
+/*                                                                   */
+/*    SVC entry registers.... AR0:  00BFB5E4  R0:  00000000 00000690 */
+/*                            AR1:  00000000  R1:  00000000 00000000 */
+/*                            AR14: 00000000  R14: 00000000 00FE3E00 */
+/*                            AR15: 00000401  R15: 00000000 0000E672 */
+/*                                                                   */
+/*    SVC return registers... AR0:  00BFB5E4  R0:  00000000 00000690 */
+/*                            AR1:  00000000  R1:  00000000 7F478970 */
+/*                            AR14: 00000000  R14: 00000000 00FE3E00 */
+/*                            AR15: 00000401  R15: 00000000 00000000 */
+/*                                                                   */
+/*  ---------------------------------------------------------------- */
+/*                                                                   */
+/*  The following variables are available to the triggered event     */
+/*  rule:                                                            */
+/*                                                                   */
+/*  &EVENT   - Event type                                            */
+/*  &TRIGGER - Event trigger                                         */
+/*  &JOBNAME - Job name                                              */
+/*  &JOBTYPE - job type (JOB, STC, TSU)                              */
+/*  &SYSID   - SMF system ID where job is running                    */
+/*  &LPAR    - LPAR name where job is running                        */
+/*  &TIME    - Time job started                                      */
+/*  &DATE    - Date job started                                      */
+/*                                                                   */
+/* ----------------------------------------------------------------- */
+/*                                                                   */
+/*  To define this event rule to ECF, add the following RULE         */
+/*  statement in PARMLIB member ECFMSTR:                             */
+/*                                                                   */
+/*   RULE=TRAPSVC,MODE=ACTIVE,RUNAS=STC                              */
+/*                                                                   */
+/*  When you define the rule in PARMLIB member ECFMSTR, ECF adds     */
+/*  it to the active queue when the subsystem instance is started.   */
+/*                                                                   */
+/*  To dynamically define this event rule to ECF, issue the ?ADD     */
+/*  command as follows:                                              */
+/*                                                                   */
+/*   /?ADD RULE=TRAPSVC,MODE=ACTIVE,RUNAS=STC                        */
+/*                                                                   */
+/*  Requirement: You must set ECF initialization option SETCON to    */
+/*               SETCON=YES in ECF PARMLIB member ECFMSTR. This      */
+/*               causes the MVS job scheduler to issue "IEF" WTO     */
+/*               messages that are listened to by ECF to trigger     */
+/*               event rules. SETCON=YES is the ECF default. this    */
+/*               causes ECF to issue the following MVS command       */
+/*               internally: SETCON MN,JOBNAMES=(ON,LOG)             */
+/*                                                                   */
+/*               SETCON=NO causes ECF initialization to bypass       */
+/*               issuing the MVS SETCON command. If you choose this  */
+/*               option, you must issue the command manually:        */
+/*               SETCON MN,JOBNAMES=(ON,LOG)                         */
+/*                                                                   */
+/*-------------------------------------------------------------------*/
+/*
+JOBSVCS(JOB**DLY)
+END
+/*
+STCSVCS(DYNAMSTC)
+WTO(STC DYNAMSTC SVC screening log ready for viewing)
+END
+/*
+TSUSVCS(SYSTS**)
+EXEC(%TRAPSVC) JOB(&JOBNAME) TYPE(&JOBTYPE) LPAR(&LPAR) DATE(&DATE)
+               TIME(&TIME)
+END
+/*
+./ ADD NAME=VLFRULE  0104-21212-21277-1836-00046-00047-00009-BENMAR  39
+/*----------------------------------------------------------------*/
+/*                                                                */
+/* Monitoring VLF availability event rule                         */
+/*                                                                */
+/*  This event is triggered when VLF is inactive and RACF is      */
+/*  doing group checking. RACF uses VLF to store group tree       */
+/*  information for improving performance.                        */
+/*                                                                */
+/*  RACF will continue processing without using VLF. The result   */
+/*  of group authority checking should be the same whether VLF    */
+/*  is active or not.                                             */
+/*                                                                */
+/*  The system issues the following informational WTO message     */
+/*  when VLF is not active"                                       */
+/*                                                                */
+/*  IRR803I VLF IS NOT ACTIVE. POSSIBLE RACF PERFORMANCE IMPACT.  */
+/*                                                                */
+/*  To define this event rule to ECF, add the following RULE      */
+/*  statement in PARMLIB member ECFMSTR:                          */
+/*                                                                */
+/*   RULE=VLFRULE,MODE=ACTIVE,RUNAS=STC                           */
+/*                                                                */
+/*  When you define the rule in PARMLIB member ECFMSTR, ECF adds  */
+/*  it to the active queue when the subsystem instance is started.*/
+/*                                                                */
+/*  To dynamically define this event rule to ECF, issue the ?ADD  */
+/*  command as follows:                                           */
+/*                                                                */
+/*   /?ADD RULE=VLFRULE,MODE=ACTIVE,RUNAS=STC                     */
+/*                                                                */
+/*  The event rule supplies the VLFRULE CLIST with the following  */
+/*  event variables:                                              */
+/*                                                                */
+/*  &TRIGGER - The IRR803I WTO message                            */
+/*  &LPAR    - LPAR name                                          */
+/*  &DATE    - Triggered event date                               */
+/*  &TIME    - Triggered event time                               */
+/*                                                                */
+/*----------------------------------------------------------------*/
+/*
+TRAPMSG('IRR803I VLF IS NOT ACTIVE')
+CMD('S VLF,SUB=MSTR')
+WTO(S VLF,SUB=MSTR issued internally by rule VLFRULE)
+EXEC(%VLFRULE) WTO('&TRIGGER') LPAR(&LPAR) DATE(&DATE) TIME(&TIME)
+END
+/*
+./ ADD NAME=WTOBUFF  0104-21089-21277-1836-00041-00028-00016-BENMAR  48
+/*------------------------------------------------------------------*/
+/* WTO Buffer Shortage Event                                        */
+/*                                                                  */
+/*  When WTO message buffer usage reaches 80 percent of the limit   */
+/*  specified, the system issues the following WTO message:         */
+/*                                                                  */
+/*  IEA405E WTO BUFFER SHORTAGE - 80% FULL                          */
+/*                                                                  */
+/*  The issued message causes CLIST WTOBUFF to trigger.             */
+/*                                                                  */
+/*  The following variables are available to the triggered event:   */
+/*                                                                  */
+/*  &EVENT   - Event type (in this example: TRAPMSG)                */
+/*  &TRIGGER - Event trigger (in this example: IEA405E WTO BUFFER   */
+/*             SHORTAGE - 80% FULL)                                 */
+/*  &JOBNAME - Job name                                             */
+/*  &JOBTYPE - job type (JOB, STC, TSU)                             */
+/*  &SYSID   - System ID                                            */
+/*  &LPAR    - LPAR name                                            */
+/*  &TIME    - Triggered event time                                 */
+/*  &DATE    - Triggered event date                                 */
+/*                                                                  */
+/*  To define this event rule to ECF, add the following RULE        */
+/*  statement in PARMLIB member ECFMSTR:                            */
+/*                                                                  */
+/*   RULE=WTOBUFF,MODE=ACTIVE,RUNAS=STC                             */
+/*                                                                  */
+/*  When you define the rule in PARMLIB member ECFMSTR, ECF adds    */
+/*  it to the active queue when the subsystem instance is started.  */
+/*                                                                  */
+/*  To dynamically define this event rule to ECF, issue the ?ADD    */
+/*  command as follows:                                             */
+/*                                                                  */
+/*   /?ADD RULE=WTOBUFF,MODE=ACTIVE,RUNAS=STC                       */
+/*                                                                  */
+/*------------------------------------------------------------------*/
+/*
+TRAPMSG('IEA405E WTO BUFFER SHORTAGE')
+EXEC(%WTOBUFF) WTO('&TRIGGER') SYS(&SYSID) DATE(&DATE) TIME(&TIME)
+END
+/*
+./ ADD NAME=ZEVENTS  0106-21062-21298-1039-00058-00120-00058-BENMAR  39
+
+Event Capture Facility (ECF)
+
+The ECF subsystem captures the following system and subsystems events:
+
+CAPTURED EVENTS
++======================================================================+
+| Event   | Event            | Event                                   |
+| Type    | Name             | Description                             |
++======================================================================+
+| JOBINIT | JOBname          | Triggers when the specified JOBname     |
+|         |                  | starts executing.                       |
+|         |                  |                                         |
++----------------------------------------------------------------------+
+| JOBTERM | JOBname          | Triggers when the specified JOBname     |
+|         |                  | normally or abnormally terminates.      |
+|         |                  |                                         |
++----------------------------------------------------------------------+
+| STCINIT | STCname          | Triggers when the specified STCname     |
+|         |                  | starts executing.                       |
+|         |                  |                                         |
++----------------------------------------------------------------------+
+| STCTERM | STCname          | Triggers when the specified STCname     |
+|         |                  | normally or abnormally terminates.      |
+|         |                  |                                         |
++----------------------------------------------------------------------+
+| TSUINIT | TSUname          | Triggers when the specified TSO user    |
+|         |                  | logs on.                                |
+|         |                  |                                         |
++----------------------------------------------------------------------+
+| TSUTERM | TSUname          | Triggers when the specified TSO user    |
+|         |                  | logs off.                               |
+|         |                  |                                         |
++----------------------------------------------------------------------+
+| TRAPCMD | Command name     | Triggers when the specified command     |
+|         |                  | is issued.                              |
+|         |                  |                                         |
++----------------------------------------------------------------------+
+| TRAPMSG | WTO/R message    | Triggers when the specified WTO/R       |
+|         |                  | message is issued.                      |
+|         |                  |                                         |
++----------------------------------------------------------------------+
+| MONITOR | STCname          | Triggers when the monitored address     |
+|         |                  | space normally or abnormally terminates.|
+|         |                  |                                         |
++----------------------------------------------------------------------+
+| JOBSVCS | Jobname          | Triggers SVC screening for the specified|
+|         |                  | batch job name.                         |
+|         |                  |                                         |
++----------------------------------------------------------------------+
+| STCSVCS | STCname          | Triggers SVC screening for the specified|
+|         |                  | started task.                           |
+|         |                  |                                         |
++----------------------------------------------------------------------+
+| TSUSVCS | User ID          | Triggers SVC screening for the specified|
+|         |                  | TSO user ID.                            |
+|         |                  |                                         |
++----------------------------------------------------------------------+
+./ ADD NAME=ZVARS    0110-21202-21333-0925-00092-00079-00080-BENMAR  00
+
+
+Event Capture Facility (ECF)
+----------------------------
+ECF captures the following variables when an event triggers:
+
+CAPTURED EVENT VARIABLES
++======================================================================+
+| Variable | Variable                                                  |
+|          | Description                                               |
++======================================================================+
+| &ABEND   | The system ABEND code (Snnn) or user ABEND code (Unnnn)   |
+|          | associated with a termination event.                      |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &COMMAND | The system or subsystem command that triggered the event. |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &CONSOLE | The console ID where the command was issued.              |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &DATE    | System date when event triggered.                         |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &EVENT   | Event type. The following event types are supported:      |
+|          |                                                           |
+|          | TRAPCMD  - MVS and subsystems commands                    |
+|          | TRAPMSG  - Trap WTO and WTOR messages                     |
+|          | JOBSVCS  - SVC screen jobs                                |
+|          | STCSVCS  - SVC screen started tasks                       |
+|          | TSUSVCS  - SVC screen TSO user IDs                        |
+|          | STCINIT  - Starting started tasks                         |
+|          | STCTERM  - Terminating started tasks                      |
+|          | JOBINIT  - Starting batch jobs                            |
+|          | JOBTERM  - Terminating batch jobs                         |
+|          | TSUINIT  - TSO user IDs logging on                        |
+|          | TSUTERM  - TSO user IDs logging off                       |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &EXEC    | The SYSPROC PDS data set member name (CLIST/REXX) to be   |
+|          | triggered when the specified event ocurrs.                |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &JOBNAME | The address space name where the event triggered.         |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &JOBTYPE | The address space type where the event triggered. JOB;    |
+|          | STC; TSU.                                                 |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &JCLERR  | The JOB NOT RUN - JCL ERROR associated with a termination |
+|          | event.                                                    |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &LPAR    | LPAR name. 8-characters.                                  |
+|          | Note: Not available in MVS 3.8J.                          |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &MEMBER  | Event rule PDS member name                                |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &MESSAGE | The WTO/R message that triggered the event.               |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &REPLYID | The reply identifier number associated with the issued    |
+|          | WTOR message.                                             |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &RUNAS   | Specifies how the event rule is to be given control.      |
+|          | JOB means that a batch job is submitted; STC means that   |
+|          | a started task is started; SUB means that a subtask is    |
+|          | attached in the ECF address space.                        |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &SYSDATA | Event trigger data. Contains the captured system data.    |
+|          | for example: Issued WTO/R or issued command.              |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &SYSID   | System identifier. 4-character SMF system ID.             |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &TIME    | System time when event triggered.                         |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &TRIGGER | Event trigger data. Contains the captured system data.    |
+|          | for example: Issued WTO/R or issued command.              |
+|          |                                                           |
++----------------------------------------------------------------------+
+| &TRIGGER | Event trigger data. Contains the captured system data.    |
+|          | for example: Issued WTO/R or issued command.              |
+|          | Same as &SYSDATA variable.                                |
++----------------------------------------------------------------------+

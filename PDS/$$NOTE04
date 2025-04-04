@@ -1,0 +1,51 @@
+Subject:  Re: V2R2 - Event Capture Facility Subsystem
+From:     Ben Marino <b2marino@outlook.com>
+Date:     7/21/2021, 7:32 AM
+To:       Sam Golob <sbgolob@cbttape.org>
+
+ Good morning, Sam. Hope you and yours are having a wonderful day.
+
+ I fixed the pesky big!
+ When you get a chance, please replace file 500 with zOS/ECF V2R2.
+
+ Summary of enhancements for zOS/ECF Version 2 Release 2 (V2R2)
+
+ 1.  Added PC router routine ASM(ECFXPC) and ASM(ECFSAF) that
+     implement RACF Security calls via RACROUTE REQUEST AUTH to
+     secure all ECF subsystem commands and restricted SVC
+     functions.
+
+ 2.  Added RACF security class ECFCLASS to support ECF commands
+     protection. Job INSTLIB($$RACF) activates class ECFCLASS and
+     defines its resource profiles. Implementation documentation
+     can be found in member INSTLIB($$AUTH).
+
+ 3.  Added dynamic LPA (CSVDYLPA) ADD and REPLACE services in ECF
+     service routine ASM(ECFCSA).
+
+ 4.  Added DISPLAY {OPTIONS | JCLPARM | STATUS | ISTATUS} ECF
+     subsystem commands in command processor ASM(ECFCOM).
+
+ 5.  Documented additional diagnostic error WTO messages in
+     member INSTLIB($$MSGS).
+
+ 6.  Enhanced ASM(ECFXPC) to allow callers to issue $TPROT PC.
+     Unlike the TPROT instruction, ECF's $TPROT handles CC 3 and
+     it's very fast.
+
+ 7.  Added ECF subsystem command prefix registration with the MVS
+     Command Prefix Facility (CPF).   CPF makes sure the command
+     prefix selected is not already in use by another subsystem
+     in the system or sysplex.
+
+ zOS/ECF release V2R2 resides in the following libraries:
+
+ SYS1.ECF.V2R2M0.ASM
+ SYS1.ECF.V2R2M0.CMDPROC
+ SYS1.ECF.V2R2M0.INSTLIB
+ SYS1.ECF.V2R2M0.MAC
+ SYS1.ECF.V2R2M0.PARMLIB
+
+ Best regards,
+ -Ben
+

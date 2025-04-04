@@ -1,0 +1,179 @@
+./ ADD NAME=JOBINIT  0103-21067-21212-1516-00015-00008-00013-BENMAR  05
+PROC 0 JOB() TYPE() SYS() EVENT() TIME() DATE()
+CONTROL NOFLUSH
+WRITE ***
+WRITE *** Variable &JOB
+WRITE *** Variable &TYPE
+WRITE *** Variable &SYS
+WRITE *** Variable &EVENT
+WRITE *** Variable &TIME
+WRITE *** Variable &DATE
+WRITE ***
+/*                                                      */
+/*   Add your processing statements here...             */
+/*                                                      */
+/*                                                      */
+END
+./ ADD NAME=JOBTERM  0103-21067-21212-1516-00015-00008-00013-BENMAR  12
+PROC 0 JOB() TYPE() SYS() EVENT() TIME() DATE()
+CONTROL NOFLUSH
+WRITE ***
+WRITE *** Variable &JOB
+WRITE *** Variable &TYPE
+WRITE *** Variable &SYS
+WRITE *** Variable &EVENT
+WRITE *** Variable &TIME
+WRITE *** Variable &DATE
+WRITE ***
+/*                                                      */
+/*   Add your processing statements here...             */
+/*                                                      */
+/*                                                      */
+END
+./ ADD NAME=SYSEVNT  0102-21196-21212-1510-00013-00008-00008-BENMAR  40
+PROC 0 WTO() LPAR() DATE(DATE) TIME(TIME)
+CONTROL NOFLUSH
+WRITE ***
+WRITE *** Variable  &WTO
+WRITE *** Variable  &LPAR
+WRITE *** Variable  &DATE
+WRITE *** Variable  &TIME
+WRITE ***
+/*                                                      */
+/*   Add your processing statements here...             */
+/*                                                      */
+/*                                                      */
+END
+./ ADD NAME=SYSRULE  0105-21212-21213-1036-00013-00013-00005-BENMAR  30
+PROC 0 STC() LPAR() DATE() TIME()
+CONTROL NOFLUSH
+WRITE ***
+WRITE *** System STC job name ... &STC
+WRITE *** System LPAR .... ...... &LPAR
+WRITE *** System Date ........... &DATE
+WRITE *** System Time ........... &TIME
+WRITE ***
+/*                                                      */
+/*   Add your processing statements here...             */
+/*                                                      */
+/*                                                      */
+END
+./ ADD NAME=TEST     0104-21067-21212-1518-00015-00007-00013-BENMAR  11
+PROC 0 CMD() DATA() SYS() LPAR()
+CONTROL NOFLUSH
+WRITE ***
+WRITE *** keyword variables only test
+WRITE ***
+WRITE *** Variable &CMD
+WRITE *** Variable &DATA
+WRITE *** Variable &SYS
+WRITE *** Variable &LPAR
+WRITE ***
+/*                                                      */
+/*   Add your processing statements here...             */
+/*                                                      */
+/*                                                      */
+END
+./ ADD NAME=TESTING  0113-21067-21250-0720-00012-00009-00011-BENMAR  37
+PROC 0 EVENT() DATA() JOB()
+CONTROL NOFLUSH
+WRITE *************************************
+WRITE *** Event trigger       = &EVENT
+WRITE *** Event data          = &DATA
+WRITE *** Executing Jobname   = &JOB
+WRITE *************************************
+/*                                                      */
+/*   Add your processing statements here...             */
+/*                                                      */
+/*                                                      */
+END
+./ ADD NAME=TESTJCL  0102-21067-21212-1519-00013-00009-00010-BENMAR  49
+PROC 0 JOB() ABEND() JCLERR()
+CONTROL NOFLUSH
+WRITE ***
+WRITE *** Testing ABEND and JCL error variables
+WRITE ***
+WRITE *** Variable &JOB
+WRITE *** Variable &&JCLERR
+WRITE ***
+/*                                                      */
+/*   Add your processing statements here...             */
+/*                                                      */
+/*                                                      */
+END
+./ ADD NAME=TESTVAR  0102-21067-21212-1520-00014-00009-00011-BENMAR  17
+PROC 2 MEMBER REPLYID SYSDATA()
+CONTROL NOFLUSH
+WRITE ***
+WRITE *** positional variables and keyword variable test
+WRITE ***
+WRITE *** Variable &MEMBER
+WRITE *** Variable &REPLYID
+WRITE *** Variable &SYSDATA
+WRITE ***
+/*                                                      */
+/*   Add your processing statements here...             */
+/*                                                      */
+/*                                                      */
+END
+./ ADD NAME=TEST2    0101-21211-21212-1521-00015-00009-00011-BENMAR  35
+PROC 3 MEMBER EVENT EXEC SYSDATA()
+CONTROL NOFLUSH
+WRITE ***
+WRITE *** This CLIST uses positional symbolics
+WRITE ***
+WRITE *** Variable &MEMBER
+WRITE *** Variable &EVENT
+WRITE *** Variable &EXEC
+WRITE *** Variable &SYSDATA
+WRITE ***
+/*                                                      */
+/*   Add your processing statements here...             */
+/*                                                      */
+/*                                                      */
+END
+./ ADD NAME=TRAPSVC  0102-21296-21304-0606-00014-00016-00001-BENMAR  48
+PROC 0 JOB() TYPE() LPAR() DATE() TIME()
+CONTROL NOFLUSH
+WRITE ***
+WRITE *** Job name .............. &JOB
+WRITE *** Job type .............. &TYPE
+WRITE *** LPAR name ............. &LPAR
+WRITE *** System Date ........... &DATE
+WRITE *** System Time ........... &TIME
+WRITE ***
+/*                                                      */
+/*   Add your processing statements here...             */
+/*                                                      */
+/*                                                      */
+END
+./ ADD NAME=VLFRULE  0102-21212-21212-1514-00013-00013-00006-BENMAR  00
+PROC 0 WTO() LPAR() DATE() TIME()
+CONTROL NOFLUSH
+WRITE ***
+WRITE *** WTO message = &WTO
+WRITE *** System LPAR = &LPAR
+WRITE *** System Date = &DATE
+WRITE *** System Time = &TIME
+WRITE ***
+/*                                                      */
+/*   Add your processing statements here                */
+/*                                                      */
+/*                                                      */
+END
+./ ADD NAME=WTOBUFF  0101-21067-21212-1515-00015-00008-00013-BENMAR  20
+PROC 0 JOB() TYPE() EVENT() WTO() DATE() TIME()
+CONTROL NOFLUSH
+WRITE ***
+WRITE *** Variable &JOB
+WRITE *** Variable &TYPE
+WRITE *** Variable &EVENT
+WRITE *** Variable &WTO
+WRITE *** Variable &DATE
+WRITE *** Variable &TIME
+WRITE ***
+/*                                                      */
+/*   Add your processing statements here                */
+/*                                                      */
+/*                                                      */
+END
